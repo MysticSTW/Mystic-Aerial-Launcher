@@ -13,7 +13,7 @@
   "Default:FrontendEmote_j": "{\"FrontendEmote\": {\"emoteItemDef\": \"None\", \"emoteEKey\": \"\", \"emoteSection\": -1}}",
   "Default:HomeBaseVersion_U": "1",
   "Default:JoinMethod_s": "EpicParties",
-  "Default:LobbyState_j": "{\"LobbyState\": {\"inGameReadyCheckStatus\": null, \"gameReadiness\": \"Ready\", \"readyInputType\": \"MouseAndKeyboard\", \"currentInputType\": \"MouseAndKeyboard\", \"hiddenMatchmakingDelayMax\": 0, \"hasPreloadedAthena\": false}}",
+  "Default:LobbyState_j": "{\"LobbyState\":{\"inGameReadyCheckStatus\":\"None\",\"readyInputType\":\"Count\",\"currentInputType\":\"MouseAndKeyboard\",\"hiddenMatchmakingDelayMax\":0,\"hasPreloadedAthena\":false}}",
   "Default:Location_s": "PreLobby",
   "Default:MatchmakingLevel_U": "0",
   "Default:MemberSquadAssignmentRequest_j": "{\"MemberSquadAssignmentRequest\": {\"startingAbsoluteIdx\": -1, \"targetAbsoluteIdx\": -1, \"swapTargetMemberId\": \"INVALID\", \"version\": 0}}",

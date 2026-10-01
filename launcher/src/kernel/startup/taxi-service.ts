@@ -830,10 +830,16 @@ export class TaxiService {
           )
         }
 
-        if (
-          matchmakingState !== MatchmakingState.NotMatchmaking &&
-          member.id === accountService.accountId
-        ) {
+        // CampaignInfo matchmakingState can be stale (e.g. "JoinSuccess" left
+        // over after the game crashed mid-matchmaking), which made the taxi
+        // leave every new invite. Only leave when the party's own state says
+        // it is really matchmaking.
+        const partyState = `${partyMetaSchema['Default:PartyState_s'] ?? ''}`
+        const reallyMatchmaking = partyState
+          ? ['Matchmaking', 'PostMatchmaking'].includes(partyState)
+          : matchmakingState !== MatchmakingState.NotMatchmaking
+
+        if (reallyMatchmaking && member.id === accountService.accountId) {
           taxiLog(account.displayName, 'party already matchmaking -> leaving')
           member.client.leaveParty().catch(() => {})
           clearCurrentTimeout()
@@ -962,6 +968,17 @@ export class TaxiService {
         ElectronAPIEventKeys.TaxiServiceServiceNotifications,
         data,
       )
+
+      // A party that broke up in some orders (leader leaves first, then the
+      // others) left the taxi flagged busy until its timer ran out, so new
+      // invites were declined. Alone in its own party means it is free.
+      if (
+        accountService.status === AccountPresence.DnD &&
+        (invitation.client.party?.members.size ?? 1) <= 1
+      ) {
+        clearCurrentTimeout()
+        accountService.status = AccountPresence.Active
+      }
 
       /**
        * Client can not join if presence is DnD

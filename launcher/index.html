@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' https://raw.githubusercontent.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'"
+    />
+    <title>Mystic Launcher</title>
+  </head>
+  <body
+    class="overflow-hidden !pointer-events-auto [&[data-scroll-locked]_#app]:pointer-events-none"
+  >
+    <div
+      id="app-background"
+      aria-hidden="true"
+    ></div>
+    <div
+      id="app"
+      class="min-h-screen"
+    ></div>
+    <script
+      type="module"
+      src="/src/kernel/renderer.ts"
+    ></script>
+  </body>
+</html>

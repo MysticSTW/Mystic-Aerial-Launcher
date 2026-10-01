@@ -1,0 +1,10 @@
+# Normalize line endings in the repo (stops the LF/CRLF warnings on Windows)
+* text=auto
+
+# Binary files
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.tgz binary

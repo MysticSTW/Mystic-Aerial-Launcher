@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'BurbankBigCondensed';
+  src: url('/BurbankBigCondensed-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@layer base {
+  :root {
+    --background: 220 20% 98%;
+    --foreground: 220 17% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 17% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 17% 14%;
+    --primary: 220 14% 20%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 16% 94%;
+    --secondary-foreground: 220 17% 14%;
+    --muted: 220 16% 95%;
+    --muted-foreground: 220 10% 40%;
+    --accent: 220 16% 92%;
+    --accent-foreground: 220 17% 14%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 86%;
+    --input: 220 13% 86%;
+    --ring: 220 14% 20%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222 24% 16%; /* Subtle dark blue tint for glass backgrounds */
+    /* All text is pure white. primary-foreground stays dark because it sits
+       on the white filled buttons. */
+    --foreground: 0 0% 100%;
+    --card: 222 24% 18%;
+    --card-foreground: 0 0% 100%;
+    --popover: 222 24% 18%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 224 16% 10%;
+    --secondary: 224 14% 22%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 224 14% 22%;
+    --muted-foreground: 0 0% 100%;
+    --accent: 224 14% 28%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 90.67% 70.59%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 224 12% 24%;
+    --input: 224 12% 24%;
+    --ring: 220 16% 82%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  /*
+   * The background image lives on its own fixed layer (set by
+   * src/lib/themes.ts). "background-attachment: fixed" on body made Chromium
+   * repaint the whole window on every scroll and theme change.
+   */
+  #app-background {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    pointer-events: none;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(4px) saturate(1.05);
+    background: rgba(15, 15, 20, 0.08);
+    z-index: -1;
+    pointer-events: none;
+  }
+}
+
+
+
+
+
+.main-wrapper-content {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  backdrop-filter: blur(0);
+  border: none;
+  outline: none;
+}
+
+
+
+.glass-surface {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0.5rem;
+  backdrop-filter: blur(0);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  outline: none;
+}
+
+
+
+.sidebar-glass {
+  background: rgba(255, 255, 255, 0.04) !important;
+  box-shadow: inset 1px 1px 0 0 rgba(255, 255, 255, 0.12), 0 8px 32px 0 rgba(31, 38, 135, 0.06) !important;
+  border-radius: 1.25rem !important;
+  backdrop-filter: blur(18px) saturate(1.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  outline: none !important;
+}
+
+.topbar-transparent {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  backdrop-filter: none !important;
+}
+
+.dropdown-frosted {
+  background: rgba(255, 255, 255, 0.05) !important;
+  box-shadow: inset 1px 1px 0 0 rgba(255, 255, 255, 0.12), 0 8px 32px 0 rgba(31, 38, 135, 0.08) !important;
+  border-radius: 1.25rem !important;
+  backdrop-filter: blur(16px) saturate(1.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  outline: none !important;
+}
+
+.app-shell-panel {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 1px 1px 0 0 rgba(255, 255, 255, 0.15), 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+  border-radius: 1.25rem;
+  backdrop-filter: blur(16px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* UI Element Borders */
+button, [role="button"], input, select, textarea {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+button:hover, [role="button"]:hover, input:hover, select:hover, textarea:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+button:focus, [role="button"]:focus, input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+:root {
+  --header-height: 3.5rem;
+
+  --sidebar-width-md: 13.75rem;
+  --sidebar-width-lg: 17.5rem;
+
+  --zone-color-stonewood: #34d375;
+  --zone-color-plankerton: #4da2dd;
+  --zone-color-canny-valley: #dfa12a;
+  --zone-color-twine-peaks: #9c72f7;
+  --zone-color-ventures: #3cd8e3; /* #20b2bd; */ /* #51e3ef; */
+}
+
+img {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Category Separation Styling */
+section {
+  padding: 0.75rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 0.5rem;
+}
+
+section:first-of-type {
+  border-top: none;
+  margin-top: 0;
+}
+
+section > h2 {
+  margin-bottom: 0.75rem;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.app-draggable-region {
+  -webkit-app-region: drag;
+}
+
+.not-draggable-region {
+  -webkit-app-region: no-drag;
+}
+
+.mantine-ColorInput-input {
+  background-color: hsl(var(--background));
+  border-color: hsl(var(--border));
+  color: hsl(var(--foreground));
+  height: 2.5rem;
+}
+
+.mantine-ColorSwatch-alphaOverlay {
+  background-image: none;
+}
+
+.mantine-ColorInput-dropdown {
+  background-color: hsl(var(--popover));
+  border: 1px solid hsl(var(--border));
+}
+
+@media (max-width: 600px) {
+  [data-sonner-toaster] {
+    --mobile-offset: 0px !important;
+  }
+}

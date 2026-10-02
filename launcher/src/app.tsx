@@ -22,6 +22,7 @@ import {
 } from './bootstrap/components/advanced-mode/load-world-info'
 import { LoadAccounts } from './bootstrap/components/load-accounts'
 import { LoadAutoLlamas } from './bootstrap/components/load-auto-llamas'
+import { LoadAutoPinUrns } from './bootstrap/components/load-auto-pin-urns'
 import { LoadAutomation } from './bootstrap/components/load-automation'
 import { LoadFriends } from './bootstrap/components/load-friends'
 import { LoadGroups } from './bootstrap/components/load-groups'
@@ -70,6 +71,7 @@ root.render(
       <LoadMatchmakingPath />
       <LoadAutomation />
       <LoadAutoLlamas />
+      <LoadAutoPinUrns />
 
       <RouterProvider
         router={router}

@@ -1,5 +1,8 @@
 import { Link } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
+
 import {
+  Check,
   Eye,
   EyeOff,
   History,
@@ -18,9 +21,8 @@ import { Button } from '../../components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '../../components/ui/dropdown-menu'
 import {
@@ -32,6 +34,7 @@ import {
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from '../../components/ui/tooltip'
@@ -111,90 +114,66 @@ export function Header() {
 
           <AccountList />
 
-          <TooltipProvider delayDuration={0}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  className={cn(
-                    'leading-4 not-draggable-region px-2 py-1',
-                    {
-                      'w-[7.5rem]': !isMinWith,
-                    },
-                  )}
-                  size={isMinWith ? 'icon' : 'default'}
-                  variant={
-                    customProcessIsRunning ? 'secondary' : 'outline'
-                  }
-                  disabled={isButtonDisabled}
-                  onClick={handleLaunch}
-                >
-                  {isMinWith ? (
-                    <Rocket size={20} />
-                  ) : (
-                    <span className="text-balance truncate">
-                      {t('launch-game.button')}
-                    </span>
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent
-                className={cn({
-                  hidden: !customProcessIsRunning,
-                })}
-              >
-                <p>{t('is-running')}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <TooltipProvider delayDuration={0}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  className={cn(
-                    'leading-4 not-draggable-region px-2 py-1',
-                    {
-                      'w-[7.5rem]': !isMinWith,
-                    },
-                  )}
-                  size={isMinWith ? 'icon' : 'default'}
-                  variant={
-                    customProcessIsRunning ? 'default' : 'secondary'
-                  }
-                  disabled={isButtonDisabled}
-                  onClick={handleKillProcess}
-                >
-                  {isMinWith ? (
-                    <X size={20} />
-                  ) : (
-                    <span className="text-balance truncate">
-                      {t('close-game.button')}
-                    </span>
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent
-                className={cn({
-                  hidden: customProcessIsRunning,
-                })}
-              >
-                <p>{t('is-not-running')}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <Button
-            className="not-draggable-region"
-            size="icon"
-            variant="ghost"
-            onAuxClick={whatIsThis()}
-            asChild
+          <HeaderTooltip
+            label={t('is-running')}
+            hidden={!customProcessIsRunning}
           >
-            <Link to="/settings">
-              <Settings />
-              <span className="sr-only">go to settings</span>
-            </Link>
-          </Button>
+            <Button
+              className={cn('leading-4 not-draggable-region px-2 py-1', {
+                'w-[7.5rem]': !isMinWith,
+              })}
+              size={isMinWith ? 'icon' : 'default'}
+              variant={customProcessIsRunning ? 'secondary' : 'outline'}
+              disabled={isButtonDisabled}
+              onClick={handleLaunch}
+            >
+              {isMinWith ? (
+                <Rocket size={20} />
+              ) : (
+                <span className="text-balance truncate">
+                  {t('launch-game.button')}
+                </span>
+              )}
+            </Button>
+          </HeaderTooltip>
+
+          <HeaderTooltip
+            label={t('is-not-running')}
+            hidden={customProcessIsRunning}
+          >
+            <Button
+              className={cn('leading-4 not-draggable-region px-2 py-1', {
+                'w-[7.5rem]': !isMinWith,
+              })}
+              size={isMinWith ? 'icon' : 'default'}
+              variant={customProcessIsRunning ? 'default' : 'secondary'}
+              disabled={isButtonDisabled}
+              onClick={handleKillProcess}
+            >
+              {isMinWith ? (
+                <X size={20} />
+              ) : (
+                <span className="text-balance truncate">
+                  {t('close-game.button')}
+                </span>
+              )}
+            </Button>
+          </HeaderTooltip>
+
+          <HeaderTooltip label="Settings">
+            <Button
+              className="not-draggable-region"
+              size="icon"
+              variant="ghost"
+              onAuxClick={whatIsThis()}
+              asChild
+            >
+              <Link to="/settings">
+                <Settings />
+                <span className="sr-only">go to settings</span>
+              </Link>
+            </Button>
+          </HeaderTooltip>
 
           <HistorySheet />
 
@@ -246,45 +225,39 @@ function UpdatesButton({ compact }: { compact: boolean }) {
   }
 
   return (
-    <TooltipProvider delayDuration={0}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            className={cn('gap-2 not-draggable-region', {
-              'bg-emerald-500/10 ring-1 ring-emerald-400/40 hover:bg-emerald-500/20':
-                update,
-            })}
-            size="sm"
-            variant="ghost"
-            onClick={handleOpen}
-          >
-            {/* A download icon: the old circular arrows looked like reload. */}
-            <Download size={18} />
-            {update
-              ? compact
-                ? 'Update'
-                : 'Update available'
-              : compact
-                ? 'Updates'
-                : 'Check for updates'}
-            {update && (
-              <span className="relative flex size-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
-              </span>
-            )}
-          </Button>
-        </TooltipTrigger>
-        {/* Below the button: above it clipped into the window's top edge. */}
-        <TooltipContent side="bottom">
-          <p>
-            {update
-              ? 'A new version is out. Click to download it.'
-              : 'Opens the latest release on GitHub'}
-          </p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <HeaderTooltip
+      label={
+        update
+          ? 'A new version is out. Click to download it.'
+          : 'Opens the latest release on GitHub'
+      }
+    >
+      <Button
+        className={cn('gap-2 not-draggable-region', {
+          'bg-emerald-500/10 ring-1 ring-emerald-400/40 hover:bg-emerald-500/20':
+            update,
+        })}
+        size="sm"
+        variant="ghost"
+        onClick={handleOpen}
+      >
+        {/* A download icon: the old circular arrows looked like reload. */}
+        <Download size={18} />
+        {update
+          ? compact
+            ? 'Update'
+            : 'Update available'
+          : compact
+            ? 'Updates'
+            : 'Check for updates'}
+        {update && (
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+            <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
+          </span>
+        )}
+      </Button>
+    </HeaderTooltip>
   )
 }
 
@@ -299,24 +272,19 @@ function HideNamesButton() {
   }
 
   return (
-    <TooltipProvider delayDuration={0}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            className="not-draggable-region"
-            size="icon"
-            variant="ghost"
-            onClick={handleToggle}
-          >
-            {hidden ? <EyeOff /> : <Eye />}
-            <span className="sr-only">toggle account names</span>
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{hidden ? 'Show account names' : 'Hide account names'}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <HeaderTooltip
+      label={hidden ? 'Show account names' : 'Hide account names'}
+    >
+      <Button
+        className="not-draggable-region"
+        size="icon"
+        variant="ghost"
+        onClick={handleToggle}
+      >
+        {hidden ? <EyeOff /> : <Eye />}
+        <span className="sr-only">toggle account names</span>
+      </Button>
+    </HeaderTooltip>
   )
 }
 
@@ -325,31 +293,71 @@ function ThemesMenu() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          className="not-draggable-region"
-          size="icon"
-          variant="ghost"
-        >
-          <Palette />
-          <span className="sr-only">change background theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
-        <DropdownMenuLabel>Themes</DropdownMenuLabel>
-        <DropdownMenuRadioGroup
-          value={current}
-          onValueChange={(id) => setCurrent(applyBackgroundTheme(id))}
-        >
-          {backgroundThemes.map((theme) => (
-            <DropdownMenuRadioItem
-              key={theme.id}
-              value={theme.id}
-            >
-              {theme.name}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
+      <HeaderTooltip label="Themes">
+        <DropdownMenuTrigger asChild>
+          <Button
+            className="not-draggable-region"
+            size="icon"
+            variant="ghost"
+          >
+            <Palette />
+            <span className="sr-only">change background theme</span>
+          </Button>
+        </DropdownMenuTrigger>
+      </HeaderTooltip>
+      <DropdownMenuContent
+        align="start"
+        className="w-72 p-2"
+        onCloseAutoFocus={(event) => event.preventDefault()}
+      >
+        <DropdownMenuLabel className="flex items-center gap-2 px-1 pb-2 pt-0.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <Palette size={14} />
+          Background theme
+        </DropdownMenuLabel>
+        <div className="grid grid-cols-2 gap-2">
+          {backgroundThemes.map((theme) => {
+            const selected = theme.id === current
+
+            return (
+              <DropdownMenuItem
+                className={cn(
+                  'group flex-col items-stretch gap-1.5 rounded-lg p-1.5 ring-1 ring-white/10 focus:bg-white/[0.08]',
+                  {
+                    'bg-white/[0.06] ring-white/60': selected,
+                  },
+                )}
+                onSelect={() => setCurrent(applyBackgroundTheme(theme.id))}
+                key={theme.id}
+              >
+                <div className="relative h-16 overflow-hidden rounded-md bg-black/40">
+                  {theme.url ? (
+                    <img
+                      className="size-full object-cover transition-transform duration-300 group-focus:scale-105"
+                      src={theme.url}
+                      alt=""
+                      draggable={false}
+                    />
+                  ) : (
+                    <div className="flex size-full items-center justify-center rounded-md border border-dashed border-white/20 text-xs text-muted-foreground">
+                      No image
+                    </div>
+                  )}
+                  {selected && (
+                    <span className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-white text-black shadow">
+                      <Check
+                        size={13}
+                        strokeWidth={3}
+                      />
+                    </span>
+                  )}
+                </div>
+                <span className="truncate px-0.5 text-xs font-medium">
+                  {theme.name}
+                </span>
+              </DropdownMenuItem>
+            )
+          })}
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -363,22 +371,67 @@ function HistorySheet() {
       open={visibility}
       onOpenChange={changeVisibility}
     >
-      <SheetTrigger asChild>
-        <Button
-          className="not-draggable-region"
-          size="icon"
-          variant="ghost"
-        >
-          <History />
-          <span className="sr-only">toggle history sidebar</span>
-        </Button>
-      </SheetTrigger>
+      <HeaderTooltip label="History">
+        <SheetTrigger asChild>
+          <Button
+            className="not-draggable-region"
+            size="icon"
+            variant="ghost"
+          >
+            <History />
+            <span className="sr-only">toggle history sidebar</span>
+          </Button>
+        </SheetTrigger>
+      </HeaderTooltip>
       <SheetContent
         className="flex flex-col p-0"
         hideCloseButton
+        onCloseAutoFocus={(event) => event.preventDefault()}
       >
         <HistoryMenu />
       </SheetContent>
     </Sheet>
+  )
+}
+
+/**
+ * A tooltip for the header buttons that only opens on hover. Radix also
+ * opens tooltips on focus, so after a click (closing a menu, or coming back
+ * to the window) the focused button showed its tooltip again and it stayed
+ * stuck open until you clicked somewhere else.
+ */
+function HeaderTooltip({
+  children,
+  hidden = false,
+  label,
+}: {
+  children: ReactNode
+  hidden?: boolean
+  label: string
+}) {
+  return (
+    <TooltipProvider delayDuration={0}>
+      <Tooltip open={hidden ? false : undefined}>
+        {/* preventDefault skips Radix's own focus handler, hover still works. */}
+        <TooltipTrigger
+          onFocus={(event) => event.preventDefault()}
+          asChild
+        >
+          {children}
+        </TooltipTrigger>
+        {/* Below the button: above it clips into the window's top edge.
+            pointer-events-none: the tooltip slides in over the bottom of
+            the button, which counted as leaving it and made it blink.
+            Portal: inside the header it went under the page menus. */}
+        <TooltipPortal>
+          <TooltipContent
+            className="pointer-events-none"
+            side="bottom"
+          >
+            <p>{label}</p>
+          </TooltipContent>
+        </TooltipPortal>
+      </Tooltip>
+    </TooltipProvider>
   )
 }

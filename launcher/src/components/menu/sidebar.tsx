@@ -17,6 +17,8 @@ import { useGetTaxiServiceDataStatus } from '../../hooks/stw-operations/taxi-ser
 import { useCustomizableMenuSettingsVisibility } from '../../hooks/settings'
 
 import { useAccountListStore } from '../../state/accounts/list'
+import { useAutoLlamaStore } from '../../state/stw-operations/auto/llamas'
+import { useAutoPinUrnDataStore } from '../../state/stw-operations/urns'
 
 import { numberWithCommaSeparator } from '../../lib/parsers/numbers'
 import { cn } from '../../lib/utils'
@@ -38,6 +40,22 @@ export function SidebarMenu({
   const { status: tsStatus } = useGetTaxiServiceDataStatus()
   const { getMenuOptionVisibility } =
     useCustomizableMenuSettingsVisibility()
+
+  // Active when any toggle is on for an account that is still added.
+  const autoLlamasActive = useAutoLlamaStore((state) =>
+    Object.values(state.accounts).some(
+      (item) =>
+        accounts[item.accountId] !== undefined &&
+        Object.values(item.actions).some(Boolean),
+    ),
+  )
+  const urnsActive = useAutoPinUrnDataStore((state) =>
+    [state.data, state.miniBosses].some((list) =>
+      Object.entries(list).some(
+        ([accountId, enabled]) => enabled && accounts[accountId] !== undefined,
+      ),
+    ),
+  )
 
   const total = Object.keys(accounts).length
   const areThereAccounts = total > 0
@@ -89,18 +107,9 @@ export function SidebarMenu({
                         <span className="flex flex-wrap gap-x-2 gap-y-0.5 items-center">
                           {t('stw-operations.options.auto-kick')}
                           {status !== null && (
-                            <span
-                              className={cn(
-                                'border flex font-bold items-center leading-none px-2 rounded text-[0.65rem] uppercase',
-                                status === AutomationStatusType.ISSUE
-                                  ? 'border-yellow-600 text-yellow-600'
-                                  : 'border-green-600 text-green-600',
-                              )}
-                            >
-                              {status === AutomationStatusType.ISSUE
-                                ? t('stw-operations.auto-kick-status.issue')
-                                : t('stw-operations.auto-kick-status.active')}
-                            </span>
+                            <StatusBadge
+                              issue={status === AutomationStatusType.ISSUE}
+                            />
                           )}
                         </span>
                       </Link>
@@ -118,18 +127,9 @@ export function SidebarMenu({
                         <span className="flex flex-wrap gap-x-2 gap-y-0.5 items-center">
                           {t('stw-operations.options.taxi-service')}
                           {tsStatus !== null && (
-                            <span
-                              className={cn(
-                                'border flex font-bold items-center leading-none px-2 rounded text-[0.65rem] uppercase',
-                                tsStatus === AutomationStatusType.ISSUE
-                                  ? 'border-yellow-600 text-yellow-600'
-                                  : 'border-green-600 text-green-600',
-                              )}
-                            >
-                              {tsStatus === AutomationStatusType.ISSUE
-                                ? t('stw-operations.auto-kick-status.issue')
-                                : t('stw-operations.auto-kick-status.active')}
-                            </span>
+                            <StatusBadge
+                              issue={tsStatus === AutomationStatusType.ISSUE}
+                            />
                           )}
                         </span>
                       </Link>
@@ -183,7 +183,10 @@ export function SidebarMenu({
                         onClick={goToPage}
                         onAuxClick={whatIsThis()}
                       >
-                        {t('stw-operations.options.auto-pin-urns')}
+                        <span className="flex flex-wrap gap-x-2 gap-y-0.5 items-center">
+                          {t('stw-operations.options.auto-pin-urns')}
+                          {urnsActive && <StatusBadge />}
+                        </span>
                       </Link>
                     </li>
                   )}
@@ -196,7 +199,10 @@ export function SidebarMenu({
                         onClick={goToPage}
                         onAuxClick={whatIsThis()}
                       >
-                        {t('stw-operations.options.auto-llamas')}
+                        <span className="flex flex-wrap gap-x-2 gap-y-0.5 items-center">
+                          {t('stw-operations.options.auto-llamas')}
+                          {autoLlamasActive && <StatusBadge />}
+                        </span>
                       </Link>
                     </li>
                   )}
@@ -471,3 +477,27 @@ const Title = forwardRef<
   )
 })
 Title.displayName = 'Title'
+
+/**
+ * The green ACTIVE (or yellow ISSUE) badge next to a menu option. Shared so
+ * every badge is the same size: building the classes by hand once left out
+ * a class the others lost through cn() and made one badge shorter.
+ */
+function StatusBadge({ issue = false }: { issue?: boolean }) {
+  const { t } = useTranslation(['sidebar'])
+
+  return (
+    <span
+      className={cn(
+        'border flex font-bold items-center px-2 rounded text-[0.65rem] uppercase',
+        issue
+          ? 'border-yellow-600 text-yellow-600'
+          : 'border-green-600 text-green-600',
+      )}
+    >
+      {issue
+        ? t('stw-operations.auto-kick-status.issue')
+        : t('stw-operations.auto-kick-status.active')}
+    </span>
+  )
+}

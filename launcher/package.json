@@ -2,8 +2,8 @@
   "name": "mystic-launcher",
   "productName": "Mystic Launcher",
   "description": "A Windows desktop application to manage Fortnite STW workflows",
-  "version": "1.0.26",
-  "releaseVersion": "1.0.2",
+  "version": "1.0.28",
+  "releaseVersion": "1.0.3",
   "author": {
     "name": "MysticSTW"
   },

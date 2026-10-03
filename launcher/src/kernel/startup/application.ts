@@ -86,7 +86,7 @@ export class Application {
       // Offline or GitHub unreachable: keep the last known result.
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.ResponseNewVersionStatus,
       Application.last,
     )

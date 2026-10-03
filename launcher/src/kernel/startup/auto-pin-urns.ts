@@ -36,7 +36,7 @@ export class AutoPinUrns {
       }
     })
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.UrnsServiceResponseData,
       {
         urns,

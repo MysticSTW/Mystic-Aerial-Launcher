@@ -33,7 +33,7 @@ export class MatchmakingTrack {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.MatchmakingTrackSaveFileNotification,
       status
     )

@@ -25,7 +25,7 @@ export class DevicesAuthManager {
   static async load(account: AccountData) {
     const devices = await DevicesAuthManager.getList(account)
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.DevicesAuthResponseData,
       devices,
     )
@@ -154,7 +154,7 @@ export class DevicesAuthManager {
           accountId: account.accountId,
         })
 
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.DevicesAuthRemoveNotification,
           account,
           deviceId,
@@ -169,7 +169,7 @@ export class DevicesAuthManager {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.DevicesAuthRemoveNotification,
       account,
       deviceId,

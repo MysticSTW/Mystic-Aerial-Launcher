@@ -67,7 +67,7 @@ export class SettingsManager {
   static async load() {
     const settings = await SettingsManager.getData()
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.OnLoadSettings,
       settings,
     )
@@ -113,7 +113,9 @@ export class SettingsManager {
       if (SystemTray.isActive) {
         SystemTray.create({
           onOpen: async () => {
-            MainWindow.instance.show()
+            if (MainWindow.isAvailable) {
+              MainWindow.instance.show()
+            }
           },
         })
       } else {
@@ -125,7 +127,7 @@ export class SettingsManager {
 
     await DataDirectory.updateSettingsFile(settings)
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.OnLoadSettings,
       settings,
     )
@@ -194,7 +196,7 @@ export class DevSettingsManager {
   static async load() {
     const data = await DataDirectory.getDevSettingsFile()
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.DevSettingsResponse,
       data.devSettings,
     )
@@ -206,7 +208,7 @@ export class CustomizableMenuSettingsManager {
     const customizableMenuSettings =
       await CustomizableMenuSettingsManager.getData()
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.CustomizableMenuSettingsResponse,
       customizableMenuSettings,
     )
@@ -232,7 +234,7 @@ export class CustomizableMenuSettingsManager {
 
     await DataDirectory.updateCustomizableMenuSettingsFile(newData)
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.CustomizableMenuSettingsResponse,
       newData,
     )
@@ -263,7 +265,7 @@ export class AppLanguage {
       response.generatedFile = false
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.AppLanguageNotification,
       response,
     )

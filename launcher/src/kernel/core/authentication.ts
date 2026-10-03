@@ -75,7 +75,7 @@ export class Authentication {
       })
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.ResponseAuthWithAuthorization,
       {
         accessToken: null,
@@ -162,7 +162,7 @@ export class Authentication {
       })
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.ResponseAuthWithAuthorization,
       {
         accessToken: null,
@@ -177,7 +177,7 @@ export class Authentication {
       const accessToken = await Authentication.verifyAccessToken(account)
 
       if (!accessToken) {
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.ResponseGenerateExchangeCode,
           {
             account,
@@ -192,7 +192,7 @@ export class Authentication {
       const exchange = await getExchangeCodeUsingAccessToken(accessToken)
 
       if (exchange.data.code) {
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.ResponseGenerateExchangeCode,
           {
             account,
@@ -209,7 +209,7 @@ export class Authentication {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.ResponseGenerateExchangeCode,
       {
         account,
@@ -224,7 +224,7 @@ export class Authentication {
       const accessToken = await Authentication.verifyAccessToken(account)
 
       if (!accessToken) {
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.OpenEpicGamesSettingsNotification,
           {
             account,
@@ -238,7 +238,7 @@ export class Authentication {
       const exchange = await getExchangeCodeUsingAccessToken(accessToken)
 
       if (exchange.data.code) {
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.OpenEpicGamesSettingsNotification,
           {
             account,
@@ -255,7 +255,7 @@ export class Authentication {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.OpenEpicGamesSettingsNotification,
       {
         account,
@@ -279,7 +279,7 @@ export class Authentication {
 
       AccountsManager.syncAccount(currentAccount.accountId, data)
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.SyncAccessToken,
         {
           data: newData,
@@ -385,7 +385,7 @@ export class Authentication {
       return accumulator
     }, {} as AccountDataRecord)
 
-    MainWindow.instance.webContents.send(eventKey, {
+    MainWindow.send(eventKey, {
       data: {
         currentAccount: newData,
         accounts: accountList,
@@ -430,7 +430,7 @@ export class Authentication {
     error: any
     key: ElectronAPIEventKeys
   }) {
-    MainWindow.instance.webContents.send(key, {
+    MainWindow.send(key, {
       accessToken: null,
       data: null,
       error:

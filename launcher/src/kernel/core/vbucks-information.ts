@@ -54,14 +54,14 @@ export class VBucksInformation {
                 {} as Record<string, VBucksInformationCurrency>
               )
 
-            MainWindow.instance.webContents.send(
+            MainWindow.send(
               ElectronAPIEventKeys.VBucksInformationResponseData,
               accountCurrency
             )
           }
         })
         .catch(() => {
-          MainWindow.instance.webContents.send(
+          MainWindow.send(
             ElectronAPIEventKeys.VBucksInformationResponseData,
             {} as VBucksInformationState['data']
           )

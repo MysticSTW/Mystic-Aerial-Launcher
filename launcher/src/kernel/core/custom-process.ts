@@ -58,7 +58,7 @@ export class CustomProcess {
         CustomProcess.id = next?.pid ?? null
         CustomProcess.isRunning = nextIsRunning
 
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.CustomProcessStatus,
           CustomProcess.isRunning
         )

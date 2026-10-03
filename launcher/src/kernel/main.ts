@@ -225,6 +225,21 @@ function isAllowedExternalURL(url: string) {
       )
     })
 
+    // With the system tray on, closing the window any other way than the
+    // app's own X (Alt+F4, the taskbar's "Close window") only hides it. A
+    // destroyed window left the tray app running with nothing to talk to.
+    mainWindow.on('close', (event) => {
+      if (SystemTray.isActive && !MainWindow.isQuitting) {
+        event.preventDefault()
+        mainWindow.hide()
+      }
+    })
+
+    // Never block Windows from shutting down or signing out.
+    mainWindow.on('query-session-end', () => {
+      MainWindow.setQuitting()
+    })
+
     mainWindow.once('ready-to-show', () => {
       mainWindow.show()
     })
@@ -254,7 +269,7 @@ function isAllowedExternalURL(url: string) {
 
   app.on('second-instance', () => {
     // Someone tried to run a second instance, we should focus our window.
-    if (MainWindow.instance) {
+    if (MainWindow.isAvailable) {
       if (SystemTray.isActive) {
         if (!MainWindow.instance.isVisible()) {
           MainWindow.instance.show()
@@ -282,7 +297,7 @@ function isAllowedExternalURL(url: string) {
      */
 
     ipcMain.on(ElectronAPIEventKeys.GetMatchmakingTrackPath, async () => {
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.GetMatchmakingTrackPathNotification,
         DataDirectory.matchmakingFilePath,
       )
@@ -425,7 +440,7 @@ function isAllowedExternalURL(url: string) {
     //   async (_, account: AccountData) => {
     //     const response = await AntiCheatProvider.request(account)
 
-    //     MainWindow.instance.webContents.send(
+    //     MainWindow.send(
     //       ElectronAPIEventKeys.ResponseProviderAndAccessTokenOnStartup,
     //       response
     //     )
@@ -897,7 +912,7 @@ function isAllowedExternalURL(url: string) {
       ElectronAPIEventKeys.UpdateAccountBasicInfo,
       async (_, account: AccountBasicInfo) => {
         await AccountsManager.add(account)
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.ResponseUpdateAccountBasicInfo,
         )
       },
@@ -1036,6 +1051,12 @@ function isAllowedExternalURL(url: string) {
   // Quit when all windows are closed, except on macOS. There, it's common
   // for applications and their menu bar to stay active until the user quits
   // explicitly with Cmd + Q.
+  // Any real quit (tray Exit, installer update) must be able to close the
+  // window, see the 'close' handler in createWindow.
+  app.on('before-quit', () => {
+    MainWindow.setQuitting()
+  })
+
   app.on('window-all-closed', () => {
     if (!SystemTray.isActive) {
       MainWindow.closeApp()

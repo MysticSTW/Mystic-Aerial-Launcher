@@ -61,7 +61,7 @@ export class AutoLlamas {
       })
     })
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.AutoLlamasLoadAccountsResponse,
       autoLlamas
     )
@@ -239,7 +239,7 @@ export class AutoLlamas {
     })
 
     sleep(2).then(() => {
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.AutoLlamasAccountCheckLoading
       )
     })
@@ -691,7 +691,7 @@ function sendRewardsNotification({
     accountId,
   }
 
-  MainWindow.instance.webContents.send(
+  MainWindow.send(
     ElectronAPIEventKeys.ClaimRewardsClientGlobalSyncNotification,
     [result]
   )

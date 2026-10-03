@@ -39,7 +39,7 @@ export class WorldInfoManager {
     try {
       const response = await WorldInfoManager.request()
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.HomeWorldInfoResponse,
         response as WorldInfoParsed
       )
@@ -51,7 +51,7 @@ export class WorldInfoManager {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.HomeWorldInfoResponse,
       defaultWorldInfo
     )
@@ -61,7 +61,7 @@ export class WorldInfoManager {
     try {
       const response = await WorldInfoManager.request()
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.WorldInfoResponseData,
         {
           data: response,
@@ -76,7 +76,7 @@ export class WorldInfoManager {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.WorldInfoResponseData,
       {
         data: null,
@@ -108,7 +108,7 @@ export class WorldInfoManager {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.WorldInfoSaveNotification,
       status
     )
@@ -170,7 +170,7 @@ export class WorldInfoManager {
             localeCompareForSorting(itemB.filename, itemA.filename)
         )
 
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.WorldInfoResponseFiles,
           sortedFiles
         )
@@ -203,7 +203,7 @@ export class WorldInfoManager {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.WorldInfoDeleteNotification,
       response
     )
@@ -211,7 +211,7 @@ export class WorldInfoManager {
 
   static async exportWorldInfoFile(value: WorldInfoFileData) {
     const defaultResponse = () => {
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.WorldInfoExportFileNotification,
         {
           status: 'canceled',
@@ -253,7 +253,7 @@ export class WorldInfoManager {
           }
         )
 
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.WorldInfoExportFileNotification,
           {
             status: 'success',
@@ -262,7 +262,7 @@ export class WorldInfoManager {
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.WorldInfoExportFileNotification,
           {
             status: 'error',
@@ -301,7 +301,7 @@ export class WorldInfoManager {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.WorldInfoOpenFileNotification,
       response
     )
@@ -337,7 +337,7 @@ export class WorldInfoManager {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.WorldInfoRenameFileNotification,
       status
     )

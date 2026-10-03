@@ -9,7 +9,7 @@ export class GroupsManager {
   static async load() {
     const { groups } = await DataDirectory.getGroupsFile()
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.OnLoadGroups,
       groups
     )

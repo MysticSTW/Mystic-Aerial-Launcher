@@ -316,7 +316,7 @@ export class TaxiService {
       TaxiService.start(data)
     })
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.TaxiServiceServiceResponseData,
       taxiService,
       false,
@@ -400,7 +400,7 @@ export class TaxiService {
         withErrors: response.some((item) => item.error !== undefined),
       } as TaxiServiceNotificationEventFriendRequestSend
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.TaxiServiceServiceNotifications,
         data,
       )
@@ -505,7 +505,7 @@ export class TaxiService {
       TaxiService.updateAccountData(data.accountId, {
         status,
       })
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.TaxiServiceServiceStartNotification,
         {
           accountId: data.accountId,
@@ -943,7 +943,7 @@ export class TaxiService {
         type: TaxiServiceNotificationType.PartyMemberJoined,
       } as TaxiServiceNotificationEventPartyMemberJoined
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.TaxiServiceServiceNotifications,
         data,
       )
@@ -964,7 +964,7 @@ export class TaxiService {
         type: TaxiServiceNotificationType.PartyInvite,
       } as TaxiServiceNotificationEventPartyInvite
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.TaxiServiceServiceNotifications,
         data,
       )
@@ -1492,7 +1492,7 @@ export class TaxiService {
         type: TaxiServiceNotificationType.FriendAdded,
       } as TaxiServiceNotificationEventFriendAdded
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.TaxiServiceServiceNotifications,
         data,
       )
@@ -1541,7 +1541,7 @@ export class TaxiService {
         TaxiService.updateAccountData(current.accountId, {
           status,
         })
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.TaxiServiceServiceStartNotification,
           {
             accountId: current.accountId,
@@ -1808,7 +1808,7 @@ export class TaxiService {
 
     await DataDirectory.updateTaxiServiceFile(automation)
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.TaxiServiceServiceResponseData,
       automation,
       true,

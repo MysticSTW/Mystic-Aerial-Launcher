@@ -26,7 +26,7 @@ export class RedeemCodes {
               accountId: account.accountId,
             })
               .then(() => {
-                MainWindow.instance.webContents.send(
+                MainWindow.send(
                   ElectronAPIEventKeys.RedeemCodesRedeenNotification,
                   {
                     accountId: account.accountId,
@@ -55,14 +55,14 @@ export class RedeemCodes {
                     RedeemCodesStatus.ERROR,
                 }
 
-                MainWindow.instance.webContents.send(
+                MainWindow.send(
                   ElectronAPIEventKeys.RedeemCodesRedeenNotification,
                   notification
                 )
               })
           })
           .catch(() => {
-            MainWindow.instance.webContents.send(
+            MainWindow.send(
               ElectronAPIEventKeys.RedeemCodesRedeenNotification,
               {
                 accountId: account.accountId,

@@ -124,7 +124,7 @@ export class XPBoostsManager {
         .filter((response) => response.status === 'fulfilled')
         .map((response) => response.value)
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.XPBoostsAccountProfileResponse,
         queryProfiles
       )
@@ -136,7 +136,7 @@ export class XPBoostsManager {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.XPBoostsAccountProfileResponse,
       []
     )
@@ -207,7 +207,7 @@ export class XPBoostsManager {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.XPBoostsConsumePersonalNotification,
       defaultResponse
     )
@@ -289,7 +289,7 @@ export class XPBoostsManager {
                   return false
                 }
 
-                MainWindow.instance.webContents.send(
+                MainWindow.send(
                   ElectronAPIEventKeys.XPBoostsConsumeTeammateProgressionNotification
                 )
 
@@ -309,7 +309,7 @@ export class XPBoostsManager {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.XPBoostsConsumeTeammateNotification,
       defaultResponse
     )
@@ -333,7 +333,7 @@ export class XPBoostsManager {
       success: false,
     }
     const sendDefaultResponse = () => {
-      MainWindow.instance.webContents.send(notificationId, defaultResponse)
+      MainWindow.send(notificationId, defaultResponse)
     }
 
     const response = await LookupManager.searchUserByDisplayName({
@@ -367,7 +367,7 @@ export class XPBoostsManager {
           queryProfileResponse.data.profileChanges[0] ?? null
 
         if (profileChanges) {
-          MainWindow.instance.webContents.send(notificationId, {
+          MainWindow.send(notificationId, {
             data: {
               profileChanges,
               lookup: response.data,

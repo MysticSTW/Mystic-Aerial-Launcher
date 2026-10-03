@@ -44,7 +44,7 @@ export class Party {
         await Authentication.verifyAccessToken(selectedAccount)
 
       if (!accessToken) {
-        MainWindow.instance.webContents.send(kickNotification, 0)
+        MainWindow.send(kickNotification, 0)
 
         return
       }
@@ -194,7 +194,7 @@ export class Party {
           ClaimRewards.core(filteredMyAccountsInPartyToClaimRewards).then(
             (response) => {
               if (response) {
-                MainWindow.instance.webContents.send(
+                MainWindow.send(
                   config?.useGlobalNotification
                     ? ElectronAPIEventKeys.ClaimRewardsClientGlobalSyncNotification
                     : ElectronAPIEventKeys.ClaimRewardsClientNotification,
@@ -205,7 +205,7 @@ export class Party {
           )
         }
 
-        MainWindow.instance.webContents.send(kickNotification, total)
+        MainWindow.send(kickNotification, total)
 
         return
       }
@@ -215,7 +215,7 @@ export class Party {
       //
     }
 
-    MainWindow.instance.webContents.send(kickNotification, 0)
+    MainWindow.send(kickNotification, 0)
   }
 
   static async leaveParty(
@@ -238,7 +238,7 @@ export class Party {
     if (claimState) {
       ClaimRewards.core(selectedAccounts).then((response) => {
         if (response) {
-          MainWindow.instance.webContents.send(
+          MainWindow.send(
             ElectronAPIEventKeys.ClaimRewardsClientNotification,
             response
           )
@@ -246,7 +246,7 @@ export class Party {
       })
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.PartyLeaveActionNotification,
       total
     )
@@ -265,7 +265,7 @@ export class Party {
           return accumulator
         }, {} as FriendRecord)
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.PartyLoadFriendsNotification,
         orderedData
       )
@@ -284,7 +284,7 @@ export class Party {
       success: false,
     }
     const sendResponse = () => {
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.PartyAddNewFriendActionNotification,
         defaultResponse
       )
@@ -319,7 +319,7 @@ export class Party {
         await DataDirectory.updateFriendsFile(orderedData)
         await Party.loadFriends()
 
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.PartyAddNewFriendActionNotification,
           {
             data: {
@@ -352,7 +352,7 @@ export class Party {
       const accessToken = await Authentication.verifyAccessToken(account)
 
       if (!accessToken) {
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.PartyInviteActionNotification,
           defaultResponse
         )
@@ -514,7 +514,7 @@ export class Party {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.PartyInviteActionNotification,
       defaultResponse
     )
@@ -549,7 +549,7 @@ export class Party {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.PartyRemoveFriendActionNotification,
       {
         status,

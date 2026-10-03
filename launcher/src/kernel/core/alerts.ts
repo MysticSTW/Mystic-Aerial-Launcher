@@ -32,7 +32,7 @@ export class AlertsDone {
       ) ?? justRandom(accounts)
 
     const sendDefaultResponse = () => {
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.HomeFetchPlayerResponse,
         defaultResponse
       )
@@ -74,7 +74,7 @@ export class AlertsDone {
           queryProfileResponse.data.profileChanges[0] ?? null
 
         if (profileChanges) {
-          MainWindow.instance.webContents.send(
+          MainWindow.send(
             ElectronAPIEventKeys.HomeFetchPlayerResponse,
             {
               data: {

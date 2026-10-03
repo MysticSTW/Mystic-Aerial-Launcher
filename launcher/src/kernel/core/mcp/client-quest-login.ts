@@ -39,7 +39,7 @@ export class MCPClientQuestLogin {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.DailyQuestsNotification
     )
   }

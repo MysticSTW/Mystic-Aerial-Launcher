@@ -15,7 +15,7 @@ import {
 export class AntiCheatProvider {
   static requestBulk(accounts: Array<AccountData>) {
     accounts.forEach((account) => {
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.ScheduleResponseProviders,
         {
           account,
@@ -30,13 +30,13 @@ export class AntiCheatProvider {
 
       AntiCheatProvider.request(account)
         .then((response: AntiCheatProviderCallbackResponseParam) => {
-          MainWindow.instance.webContents.send(
+          MainWindow.send(
             ElectronAPIEventKeys.ScheduleResponseProviders,
             response
           )
         })
         .catch((response: AntiCheatProviderCallbackResponseParam) => {
-          MainWindow.instance.webContents.send(
+          MainWindow.send(
             ElectronAPIEventKeys.ScheduleResponseProviders,
             response
           )

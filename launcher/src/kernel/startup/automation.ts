@@ -127,7 +127,7 @@ export class Automation {
       Automation.start(data)
     })
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.AutomationServiceResponseData,
       automation,
       false,
@@ -226,7 +226,7 @@ export class Automation {
       Automation.updateAccountData(data.accountId, {
         status,
       })
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.AutomationServiceStartNotification,
         {
           accountId: data.accountId,
@@ -743,7 +743,7 @@ export class Automation {
 
     await DataDirectory.updateAutomationFile(automation)
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.AutomationServiceResponseData,
       automation,
       true,

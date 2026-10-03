@@ -12,7 +12,7 @@ export class TagsManager {
     const result = await DataDirectory.getTagsFile()
     const tags: TagRecord = sortTags(result.tags)
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.OnLoadTags,
       tags
     )
@@ -21,7 +21,7 @@ export class TagsManager {
   static async update(tags: TagRecord) {
     await DataDirectory.updateTagsFile(sortTags(tags))
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.NotificationCreationTag
     )
   }

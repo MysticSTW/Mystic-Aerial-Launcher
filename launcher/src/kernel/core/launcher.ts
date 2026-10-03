@@ -18,7 +18,7 @@ import {
 export class FortniteLauncher {
   static async start(account: AccountData) {
     const sendError = () => {
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.LauncherNotification,
         {
           account,
@@ -101,7 +101,7 @@ export class FortniteLauncher {
         cwd: settings.path,
       })
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.LauncherNotification,
         {
           account,

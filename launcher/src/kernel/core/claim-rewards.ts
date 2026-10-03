@@ -34,7 +34,7 @@ export class ClaimRewards {
     // Returned so callers can wait for the claim (Auto Claim logs its timing).
     return ClaimRewards.core(accounts).then((response) => {
       if (response) {
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           useGlobalNotification
             ? ElectronAPIEventKeys.ClaimRewardsClientGlobalSyncNotification
             : ElectronAPIEventKeys.ClaimRewardsClientNotification,
@@ -42,7 +42,7 @@ export class ClaimRewards {
         )
       }
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         useGlobalNotification
           ? ElectronAPIEventKeys.ClaimRewardsClientGlobalAutoClaimedNotification
           : ElectronAPIEventKeys.PartyClaimActionNotification,

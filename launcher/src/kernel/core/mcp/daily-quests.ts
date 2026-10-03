@@ -33,7 +33,7 @@ export class MCPDailyQuests {
         .filter((response) => response.status === 'fulfilled')
         .map((response) => response.value)
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.DailyQuestsNotification,
         data,
       )
@@ -45,7 +45,7 @@ export class MCPDailyQuests {
       //
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.DailyQuestsNotification,
       [],
     )
@@ -62,7 +62,7 @@ export class MCPDailyQuests {
       const accessToken = await Authentication.verifyAccessToken(account)
 
       if (!accessToken) {
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.DailyQuestRerollNotification,
           response,
         )
@@ -84,7 +84,7 @@ export class MCPDailyQuests {
         profileResponse.data.profileChanges?.[0]?.profile ?? null
 
       if (!profile) {
-        MainWindow.instance.webContents.send(
+        MainWindow.send(
           ElectronAPIEventKeys.DailyQuestRerollNotification,
           response,
         )
@@ -103,7 +103,7 @@ export class MCPDailyQuests {
         quests,
       }
 
-      MainWindow.instance.webContents.send(
+      MainWindow.send(
         ElectronAPIEventKeys.DailyQuestRerollNotification,
         {
           accountId: account.accountId,
@@ -123,7 +123,7 @@ export class MCPDailyQuests {
       }
     }
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.DailyQuestRerollNotification,
       response,
     )

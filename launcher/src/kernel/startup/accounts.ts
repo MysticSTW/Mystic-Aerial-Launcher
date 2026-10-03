@@ -39,7 +39,7 @@ export class AccountsManager {
       return accumulator
     }, {} as AccountDataRecord)
 
-    MainWindow.instance.webContents.send(
+    MainWindow.send(
       ElectronAPIEventKeys.OnAccountsLoaded,
       accountsRecord
     )

@@ -27,7 +27,7 @@ export class EULATracking {
         Authentication.verifyAccessToken(account)
           .then(async (accessToken) => {
             const sendDefaultError = () => {
-              MainWindow.instance.webContents.send(
+              MainWindow.send(
                 ElectronAPIEventKeys.EULAVerificationResponse,
                 {
                   [accountId]: {
@@ -71,7 +71,7 @@ export class EULATracking {
               return
             }
 
-            MainWindow.instance.webContents.send(
+            MainWindow.send(
               ElectronAPIEventKeys.EULAVerificationResponse,
               {
                 [accountId]: {
@@ -117,7 +117,7 @@ export class EULATracking {
               }
             }
 
-            MainWindow.instance.webContents.send(
+            MainWindow.send(
               ElectronAPIEventKeys.EULAVerificationResponse,
               response
             )

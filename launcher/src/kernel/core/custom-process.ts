@@ -9,6 +9,7 @@ export class CustomProcess {
   private static name: string | null = null
   private static isRunning = false
   private static poller: NodeJS.Timeout | null = null
+  private static isSyncing = false
 
   private static parseTasklistLine(line: string) {
     const values = line.match(/"([^"]*)"/g)
@@ -28,15 +29,19 @@ export class CustomProcess {
   }
 
   private static syncStatus() {
-    if (!CustomProcess.name) {
+    if (!CustomProcess.name || CustomProcess.isSyncing) {
       return
     }
+
+    CustomProcess.isSyncing = true
 
     execFile(
       'tasklist',
       ['/FO', 'CSV', '/NH'],
-      { windowsHide: true },
+      { windowsHide: true, timeout: 5000 },
       (error, stdout) => {
+        CustomProcess.isSyncing = false
+
         if (error) {
           return
         }

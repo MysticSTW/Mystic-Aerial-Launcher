@@ -54,6 +54,14 @@ export function useDailyQuestsData() {
     const listener = window.electronAPI.notificationDailyQuests(
       async (value) => {
         setIsLoading(false)
+
+        if (!Array.isArray(value)) {
+          setDailyQuests([])
+          toast(t('daily-quests.notifications.failed'))
+
+          return
+        }
+
         setDailyQuests(value)
       }
     )

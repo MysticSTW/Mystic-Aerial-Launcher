@@ -141,6 +141,9 @@ function Content() {
                       const displayName = accountData
                         ? parseCustomDisplayName(accountData)
                         : account.accountId
+                      const quests = Array.isArray(account.quests)
+                        ? account.quests
+                        : null
 
                       return (
                         <div
@@ -158,17 +161,18 @@ function Content() {
                             </div>
                           </div>
 
-                          {account.errorMessage ? (
+                          {account.errorMessage || !quests ? (
                             <div className="border-l-4 border-red-400 ml-2 pl-2 text-red-400 text-sm">
-                              {account.errorMessage}
+                              {account.errorMessage ??
+                                t('daily-quests.notifications.failed')}
                             </div>
-                          ) : account.quests.length <= 0 ? (
+                          ) : quests.length <= 0 ? (
                             <div className="text-sm text-muted-foreground">
                               {t('daily-quests.list.no-quests')}
                             </div>
                           ) : (
                             <div className="space-y-3">
-                              {account.quests.map((quest) => {
+                              {quests.map((quest) => {
                                 const isRerolling =
                                   rerollingQuest?.accountId ===
                                     account.accountId &&
@@ -289,6 +293,5 @@ function Content() {
     </>
   )
 }
-
 
 

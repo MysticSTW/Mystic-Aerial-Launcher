@@ -1,8 +1,5 @@
 import type { AccountData } from '../../../types/accounts'
 
-import { ElectronAPIEventKeys } from '../../../config/constants/main-process'
-
-import { MainWindow } from '../../startup/windows/main'
 import { Authentication } from '../authentication'
 
 import { setClientQuestLogin } from '../../../services/endpoints/mcp'
@@ -38,9 +35,5 @@ export class MCPClientQuestLogin {
     } catch (error) {
       //
     }
-
-    MainWindow.send(
-      ElectronAPIEventKeys.DailyQuestsNotification
-    )
   }
 }
